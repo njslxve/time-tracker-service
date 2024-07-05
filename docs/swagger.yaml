@@ -1,0 +1,290 @@
+basePath: /
+definitions:
+  dto.AddUserRequest:
+    properties:
+      passportNumber:
+        type: string
+    type: object
+  dto.Error:
+    properties:
+      error:
+        type: string
+    type: object
+  dto.GetUsersResponse:
+    properties:
+      next_page:
+        type: string
+      users:
+        items:
+          $ref: '#/definitions/dto.User'
+        type: array
+    type: object
+  dto.TaskRequest:
+    properties:
+      task_id:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.TaskResponse:
+    properties:
+      duration:
+        type: string
+      end_time:
+        type: string
+      start_time:
+        type: string
+      task_id:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  dto.UpdateUserRequest:
+    properties:
+      adress:
+        type: string
+      name:
+        type: string
+      passport:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+    type: object
+  dto.User:
+    properties:
+      adress:
+        type: string
+      name:
+        type: string
+      passport:
+        type: string
+      patronymic:
+        type: string
+      surname:
+        type: string
+      user_id:
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Time Tracker API
+  version: "1.0"
+paths:
+  /tasks/{user}:
+    get:
+      consumes:
+      - application/json
+      description: get tasks
+      parameters:
+      - description: user id
+        in: path
+        name: user
+        required: true
+        type: string
+      - description: interval
+        in: query
+        name: interval
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.TaskResponse'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Error'
+      summary: get tasks
+      tags:
+      - tasks
+  /tasks/end:
+    post:
+      consumes:
+      - application/json
+      description: end task
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Error'
+      summary: end task
+      tags:
+      - tasks
+  /tasks/start:
+    post:
+      consumes:
+      - application/json
+      description: add task
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.TaskRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Error'
+      summary: add task
+      tags:
+      - tasks
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get users
+      parameters:
+      - description: name
+        in: query
+        name: name
+        type: string
+      - description: surname
+        in: query
+        name: surname
+        type: string
+      - description: adress
+        in: query
+        name: adress
+        type: string
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: next_page
+        in: query
+        name: next_page
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.GetUsersResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Error'
+      summary: get users
+      tags:
+      - users
+  /users/{user}:
+    delete:
+      consumes:
+      - application/json
+      description: delete user
+      parameters:
+      - description: user id
+        in: path
+        name: user
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Error'
+      summary: delete user
+      tags:
+      - users
+    patch:
+      consumes:
+      - application/json
+      description: update user
+      parameters:
+      - description: user id
+        in: path
+        name: user
+        required: true
+        type: string
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Error'
+      summary: update user
+      tags:
+      - users
+  /users/add:
+    post:
+      consumes:
+      - application/json
+      description: add user
+      parameters:
+      - description: request body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.AddUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/dto.Error'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/dto.Error'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Error'
+      summary: add user
+      tags:
+      - users
+swagger: "2.0"

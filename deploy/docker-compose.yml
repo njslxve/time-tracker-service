@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  time-tracker-db:
+    image: postgres:15
+    ports:
+      - target: 5432
+        published: 5432
+        protocol: tcp
+        mode: target
+    environment:
+      POSTGRES_DB: time-tracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    
+
